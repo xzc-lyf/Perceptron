@@ -1,6 +1,4 @@
 import math
-import matplotlib.pyplot as plt
-import numpy as np
 
 '''
 :param
@@ -115,7 +113,10 @@ def train_model(features, labels, max_iterations, gamma_guess, dimension):
     print("Training stopped - maximum iterations reached.")
     return weights, False
 
-
+"""
+:param
+    file_list: The dataset file path list.
+"""
 def train_margin_perceptron(file_list):
     for file in file_list:
         features, labels, dimension, radius = load_dataset(file)
