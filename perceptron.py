@@ -74,7 +74,7 @@ def check_violation(features, labels, weights, gamma_guess):
     for index, (point, label) in enumerate(zip(features, labels)):
         dot_val = compute_dot_product(weights, point)
         curr_margin = math.fabs(dot_val / len_w) if len_w else 0
-        if (curr_margin < gamma_guess / 2 or label == 1 and dot_val <= 0) or (label == -1 and dot_val >= 0):
+        if (curr_margin < gamma_guess / 2) or (label == 1 and dot_val <= 0) or (label == -1 and dot_val >= 0):
             return index, curr_margin
     return -1, curr_margin
 
