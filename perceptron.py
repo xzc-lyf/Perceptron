@@ -45,8 +45,8 @@ def compute_dot_product(vec1, vec2):
 :returns
     res: Maximum number of iterations.
 """
-def calculate_max_iterations(radius, gamma):
-    return math.ceil((radius ** 2) / (gamma ** 2))
+def calculate_max_iterations(radius, gamma_opt):
+    return math.ceil(12 * (radius ** 2) / (gamma_opt ** 2))
 
 """
 :param
@@ -59,15 +59,24 @@ def calculate_max_iterations(radius, gamma):
 def update_weights(weights, point, label):
     return [w + label * float(x) for w, x in zip(weights, point)]
 
-
-def check_violation(features, labels, weights, gamma_threshold):
-    norm_w = math.sqrt(sum(w ** 2 for w in weights)) if any(weights) else 0
+"""
+:param
+    features: A list used to store the coordinates in the dataset.
+    labels: A list stores the label (1 or -1) for each data point.
+    weights: The weight vector to be adjusted.
+    gamma_guess: An arbitrary value (Set to radius in this case).
+:returns
+    res1: Index
+    res2: Distance between the violation point and the plane.
+"""
+def check_violation(features, labels, weights, gamma_guess):
+    len_w = math.sqrt(sum(w ** 2 for w in weights)) if any(weights) else 0
     for index, (point, label) in enumerate(zip(features, labels)):
         dot_val = compute_dot_product(weights, point)
-        margin = (dot_val * label) / norm_w if norm_w else 0
-        if (label == 1 and dot_val <= 0) or (label == -1 and dot_val >= 0):
-            return index, margin
-    return -1, margin
+        curr_margin = math.fabs(dot_val / len_w) if len_w else 0
+        if (label == 1 and dot_val <= 0) or (label == -1 and dot_val >= 0) or curr_margin < gamma_guess / 2:
+            return index, curr_margin
+    return -1, curr_margin
 
 
 def train_model(features, labels, max_iterations, radius, dimension):
@@ -120,6 +129,7 @@ def train_margin_perceptron(file_list):
         print(f"Final gamma: {gamma}")
         print("Final weights:", weights)
         break  # 假设仅训练第一个文件
+
 
 def plot_decision_boundary(features, labels, weights, title="Margin Perceptron Training"):
     """
