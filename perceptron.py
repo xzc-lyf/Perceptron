@@ -74,7 +74,7 @@ def check_violation(features, labels, weights, gamma_guess):
     for index, (point, label) in enumerate(zip(features, labels)):
         dot_val = compute_dot_product(weights, point)
         curr_margin = math.fabs(dot_val / len_w) if len_w else 0
-        if (label == 1 and dot_val <= 0) or (label == -1 and dot_val >= 0) or curr_margin < gamma_guess / 2:
+        if (curr_margin < gamma_guess / 2 or label == 1 and dot_val <= 0) or (label == -1 and dot_val >= 0):
             return index, curr_margin
     return -1, curr_margin
 
@@ -84,15 +84,14 @@ def check_violation(features, labels, weights, gamma_guess):
     features: A list used to store the coordinates in the dataset.
     labels: A list stores the label (1 or -1) for each data point.
     max_iterations: Maximum number of iterations.
-    radius: radius.
+    gamma_guess: gamma_guess.
     dimension: Number of features.
 :returns
     res1: The weight vector.
     res2: The flag of training complete or not.
 """
-def train_model(features, labels, max_iterations, radius, dimension):
+def train_model(features, labels, max_iterations, gamma_guess, dimension):
     weights = [0] * dimension
-    gamma_guess = radius
 
     for iteration in range(max_iterations):
         violation_index, margin = check_violation(features, labels, weights, gamma_guess)
@@ -124,7 +123,7 @@ def train_margin_perceptron(file_list):
         max_iterations = calculate_max_iterations(radius, gamma_guess)
 
         while True:
-            weights, training_complete = train_model(features, labels, max_iterations, radius, dimension)
+            weights, training_complete = train_model(features, labels, max_iterations, gamma_guess, dimension)
             if training_complete or gamma_guess <= 1e-8:
                 if gamma_guess <= 1e-8:
                     print("Converged to approximate requirement; stopping margin perceptron.")
@@ -137,4 +136,4 @@ def train_margin_perceptron(file_list):
         print("Final weights:", weights)
         break
 
-# train_margin_perceptron(["./Dataset1.txt", "./Dataset2.txt","./Dataset3.txt"])
+train_margin_perceptron(["./Dataset1.txt", "./Dataset2.txt","./Dataset3.txt"])
