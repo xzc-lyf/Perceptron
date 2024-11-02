@@ -43,8 +43,8 @@ def compute_dot_product(vec1, vec2):
 :returns
     res: Maximum number of iterations.
 """
-def calculate_max_iterations(radius, gamma_opt):
-    return math.ceil(12 * (radius ** 2) / (gamma_opt ** 2))
+def calculate_max_iterations(radius, gamma):
+    return math.ceil(12 * (radius ** 2) / (gamma ** 2))
 
 """
 :param
@@ -112,80 +112,6 @@ def train_model(features, labels, max_iterations, gamma_guess, weights):
     print("Training stopped - maximum iterations reached.")
     return weights, False
 
-"""
-    Visualize data points and current decision boundaries.
-    :param features: Coordinates list of data points
-    :param labels: List of labels of data points (1 or -1)
-    :param weights: indicates the current weight vector
-    :param title: indicates the title of the image
-    """
-def plot_decision_boundary(features, labels, weights, title="Margin Perceptron Training"):
-    # 将features转换为浮点型列表
-    features = [list(map(float, f)) for f in features]
-
-    # 找到x和y的最小值和最大值
-    x_min = min(features, key=lambda x: x[0])[0] - 1
-    x_max = max(features, key=lambda x: x[0])[0] + 1
-    y_min = min(features, key=lambda x: x[1])[1] - 1
-    y_max = max(features, key=lambda x: x[1])[1] + 1
-
-    # 创建网格
-    xx = []
-    yy = []
-    for i in range(100):
-        x = x_min + (x_max - x_min) * i / 99
-        xx.append([x] * 100)
-        yy.append([y_min + (y_max - y_min) * j / 99 for j in range(100)])
-
-    # 计算决策边界
-    Z = [[1 if weights[0] * xx[i][j] + weights[1] * yy[i][j] > 0 else -1 for j in range(100)] for i in range(100)]
-
-    # 绘图
-    from matplotlib import pyplot as plt
-    plt.contourf(xx, yy, Z, alpha=0.1, cmap=plt.cm.coolwarm)
-
-    # 绘制数据点
-    positive_samples = [features[i] for i in range(len(labels)) if labels[i] == 1]
-    negative_samples = [features[i] for i in range(len(labels)) if labels[i] == -1]
-    plt.scatter([p[0] for p in positive_samples], [p[1] for p in positive_samples], c='b', label="Positive (1)", edgecolor='k')
-    plt.scatter([n[0] for n in negative_samples], [n[1] for n in negative_samples], c='r', label="Negative (-1)", edgecolor='k')
-
-    # 绘制权重向量（决策边界）
-    if any(weights):
-        slope = -weights[0] / (weights[1] if weights[1] != 0 else 1e-10)
-        intercept = 0
-        x_vals = [x_min, x_max]
-        y_vals = [slope * x + intercept for x in x_vals]
-        plt.plot(x_vals, y_vals, 'k--', linewidth=1, label="Decision Boundary")
-
-    plt.xlabel("Feature 1")
-    plt.ylabel("Feature 2")
-    plt.title(title)
-    plt.legend(loc="best")
-    plt.show()
-
-
-# train_model with visualization
-def train_model_with_visualization(features, labels, max_iterations, gamma_guess, weights):
-
-    for iteration in range(max_iterations):
-        violation_index, margin = check_violation(features, labels, weights, gamma_guess)
-
-        plot_decision_boundary(features, labels, weights, title=f"Iteration {iteration + 1}")
-        if violation_index == -1:
-            print("Training complete - no violations.")
-            print(f"Final Weights after {iteration} iterations:", weights)
-            return weights, True
-        print(f"\nIteration {iteration + 1}")
-        print("Current Weights:", weights)
-        print("Margin of violating sample:", margin)
-        print("Violating sample:", features[violation_index])
-        print("Label of violating sample:", labels[violation_index])
-        # update weights
-        weights = update_weights(weights, features[violation_index], labels[violation_index])
-    print("Training stopped - maximum iterations reached.")
-    return weights, False
-
 
 """
 :param
@@ -200,11 +126,9 @@ def train_margin_perceptron(file_list):
         gamma_guess = radius
         max_iterations = calculate_max_iterations(radius, gamma_guess)
 
-        # 根据文件名选择训练函数
-        train_func = train_model_with_visualization if "Dataset1" in file else train_model
         weights = [0] * dimension
         while True:
-            weights, training_complete = train_func(features, labels, max_iterations, gamma_guess, weights)
+            weights, training_complete = train_model(features, labels, max_iterations, gamma_guess, weights)
             if training_complete or gamma_guess <= 1e-8:
                 if gamma_guess <= 1e-8:
                     print("Converged to approximate requirement; stopping margin perceptron.")
