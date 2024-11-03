@@ -93,13 +93,14 @@ def train_model(features, labels, max_iterations, gamma_guess, weights):
     for iteration in range(max_iterations):
         violation_index, margin = check_violation(features, labels, weights, gamma_guess)
 
+        print(f"\nIteration {iteration + 1}")
+        print("Current Weights:", weights)
+
         if violation_index == -1:
             print("Training complete - no violations.")
             print(f"Final Weights after {iteration} iterations:", weights)
             return weights, True
 
-        print(f"\nIteration {iteration + 1}")
-        print("Current Weights:", weights)
         print("Margin of violating sample:", margin)
         print("Violating sample:", features[violation_index])
         print("Label of violating sample:", labels[violation_index])
@@ -147,7 +148,5 @@ def train_margin_perceptron(file_list):
         print(f"\nFile {i+1}:")
         print(f"Final gamma: {gamma}")
         print(f"Final weights: {weight}")
-
-
 
 train_margin_perceptron(["./Dataset1.txt", "./Dataset2.txt","./Dataset3.txt"])
