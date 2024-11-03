@@ -140,13 +140,13 @@ def train_margin_perceptron(file_list):
 
         final_gammas.append(gamma_guess)
         final_weights.append(weights)
-        print(f"Final gamma: {gamma_guess}")
+        print(f"Final gamma guess: {gamma_guess}")
         print("Final weights:", weights)
 
     print('-' * 40)
     for i, (gamma, weight) in enumerate(zip(final_gammas, final_weights)):
         print(f"\nFile {i+1}:")
-        print(f"Final gamma: {gamma}")
+        print(f"Final gamma guess: {gamma}")
         print(f"Final weights: {weight}")
 
 train_margin_perceptron(["./Dataset1.txt", "./Dataset2.txt","./Dataset3.txt"])
