@@ -15,25 +15,23 @@ File Structure:
 ├── Dataset1.txt
 ├── Dataset2.txt
 ├── Dataset3.txt
-├── CMSC5724_MarginPerceptron_Report.docx       # Project report
+├── CMSC5724_MarginPerceptron_Report.docx   # Project report
 ├── README.md                               # Project description and instructions
 ```
 
 
 ## Table of Contents
-1. [Background](#background)
-2. [Dataset Description](#dataset-description)
-3. [Environment Requirements](#environment-requirements)
-4. [Installation Instructions](#installation-instructions)
-5. [Usage Instructions](#usage-instructions)
-6. [Output Description](#output-description)
-7. [Report](#report)
-## Background
-The Margin Perceptron algorithm is a machine learning algorithm used for classification tasks. It aims to find a hyperplane that maximizes the margin between classes.
+1. [Dataset Description](#dataset-description)
+2. [Environment Requirements](#environment-requirements)
+3. [Installation Instructions](#installation-instructions)
+4. [Usage Instructions](#usage-instructions)
+5. [Output Description](#output-description)
+6. [Report](#report)
+
 ## Dataset Description
 Dataset format:
 - The first line contains three numbers `d`, `n`, and `r`, representing the number of dimensionality, samples and radius.
-- From the second line, each line represents a data point in the format: `x1,x2,...,xd,label`, where the first `d` values are coordinates, and `label` is either `1` or `-1`.
+- From the second line, each line represents a data point in the format: `x1, x2, ..., xd, label`, where the first `d` values are coordinates, and `label` is either `1` or `-1`.
 Example datasets provided:
 - `2d-r16-n10000`
 - `4d-r24-n10000`
