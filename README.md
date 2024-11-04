@@ -29,7 +29,6 @@ File Structure:
 6. [Report](#report)
 
 ## Dataset Description
-Dataset format:
 - The first line contains three numbers `d`, `n`, and `r`, representing the number of dimensionality, samples and radius.
 - From the second line, each line represents a data point in the format: `x1, x2, ..., xd, label`, where the first `d` values are coordinates, and `label` is either `1` or `-1`.
 Example datasets provided:
